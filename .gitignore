@@ -1,5 +1,7 @@
 # Prerequisites
 *.d
+obj
+*.un~
 
 # Object files
 *.o
