@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jmakkone <jmakkone@student.hive.fi>        +#+  +:+       +#+         #
+#    By: mpellegr <mpellegr@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/06/02 16:11:30 by jmakkone          #+#    #+#              #
-#    Updated: 2024/10/08 09:41:44 by mpellegr         ###   ########.fr        #
+#    Created: 2024/10/10 17:34:40 by mpellegr          #+#    #+#              #
+#    Updated: 2024/10/11 09:38:03 by mpellegr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,14 +14,14 @@ NAME            = philo
 SRC_DIR         = src
 INC_DIR         = inc
 
-SRC             = $(SRC_DIR)/main.c
+SRC             = $(SRC_DIR)/main.c $(SRC_DIR)/routine.c $(SRC_DIR)/create_table.c $(SRC_DIR)/utils.c
 
 OBJ_DIR         = obj
 OBJ             = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 RM              = rm -f
 CC              = cc
-CFLAGS          = -Wall -Wextra -Werror -I$(INC_DIR) -pthread
+CFLAGS          = -Wall -Wextra -Werror -I$(INC_DIR) -pthread -g
 
 all:	$(NAME)
 

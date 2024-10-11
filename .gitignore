@@ -2,6 +2,7 @@
 *.d
 obj
 *.un~
+*.vscode
 
 # Object files
 *.o
