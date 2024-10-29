@@ -6,23 +6,11 @@
 /*   By: mpellegr <mpellegr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 17:32:08 by mpellegr          #+#    #+#             */
-/*   Updated: 2024/10/11 10:55:15 by mpellegr         ###   ########.fr       */
+/*   Updated: 2024/10/29 13:07:48 by mpellegr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-static int	ft_atoi(char *num)
-{
-	int n;
-	int i;
-
-	i = -1;
-	n = 0;
-	while (num[++i])
-		n = n * 10 + (num[i] - '0');
-	return (n);
-}
 
 static int	ft_isdigit(int arg)
 {
@@ -31,55 +19,67 @@ static int	ft_isdigit(int arg)
 	return (0);
 }
 
-static void	validate_input(char **argv)
+static int	ft_isspace(int arg)
 {
-	int	i;
-	int	j;
-
-	i = 0;
-	while (argv[++i])
-	{
-		j = -1;
-		while (argv[i][++j])
-		{
-			if (!ft_isdigit(argv[i][j]))
-			{
-				write (2, "non numeric argument\n", 21);
-				exit (EXIT_FAILURE);
-			}
-		}
-	}
+	if ((arg >= 9 && arg <= 13) || arg == 32)
+		return (1);
+	return (0);
 }
 
-void	create_table(char **argv, t_table *table)
+static char	*validate_input(char *str)
 {
-	int	i;
+	int		len;
+	char	*num;
 
-	validate_input(argv);
-	table->n_of_philo = ft_atoi(argv[1]);
-	table->time_to_die = ft_atoi(argv[2]);
-	table->time_to_eat = ft_atoi(argv[3]);
-	table->time_to_sleep = ft_atoi(argv[4]);
+	len = 0;
+	while (ft_isspace(*str))
+		str++;
+	if (*str == '+')
+		str++;
+	else if (*str == '-')
+		return_error_str("input is negative\n");
+	if (!ft_isdigit(*str))
+		return_error_str("input is not a digit\n");
+	num = str;
+	while (ft_isdigit(*str++))
+		len++;
+	if (len > 10)
+		return_error_str("input bigger than INT_MAX\n");
+	return (num);
+}
+
+static long	ft_atol(char *str, int *err)
+{
+	long num;
+
+	str = validate_input(str);
+	if (!str)
+		*err = 1;
+	num = 0;
+	while (ft_isdigit(*str))
+		num = num * 10 + (*str++ - '0');
+	if (num > INT_MAX)
+	{
+		write (2, "input bigger than INT_MAX\n", 26);
+		*err = 1;
+	}
+	return (num);
+}
+
+int	create_table(char **argv, t_table *table)
+{
+	int	err;
+
+	err = 0;
+	table->n_of_philo = ft_atol(argv[1], &err);
+	table->time_to_die = ft_atol(argv[2], &err);
+	table->time_to_eat = ft_atol(argv[3], &err);
+	table->time_to_sleep = ft_atol(argv[4], &err);
 	if (argv[5])
-		table->n_of_times_to_eat = ft_atoi(argv[5]);
-	table->start = 0;
-	table->philo = malloc(sizeof(t_philo) * table->n_of_philo);
-	table->forks = malloc(sizeof(pthread_mutex_t)  * table->n_of_philo);
-	if (pthread_mutex_init(&table->lock_action, NULL) != 0)
-	{
-		printf("mutex_init failed for forks");
-		exit (EXIT_FAILURE);
-	}
-	i = -1;
-	while (++i < table->n_of_philo)
-		pthread_mutex_init(&table->forks[i], NULL);
-	i = -1;
-	while (++i < table->n_of_philo)
-	{
-		table->philo[i].n_of_meals = 0;
-		table->philo[i].last_meal = 0;
-		table->philo[i].id = i + 1;
-		table->philo[i].left_fork = &table->forks[i];
-		table->philo[i].right_fork = &table->forks[(i + 1) % table->n_of_philo];
-	}
+		table->n_of_times_to_eat = ft_atol(argv[5], &err);
+	else
+		table->n_of_times_to_eat = -1;
+	if (err == 1)
+		return (1);
+	return (0);
 }

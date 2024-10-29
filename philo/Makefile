@@ -5,8 +5,8 @@
 #                                                     +:+ +:+         +:+      #
 #    By: mpellegr <mpellegr@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/10/10 17:34:40 by mpellegr          #+#    #+#              #
-#    Updated: 2024/10/11 09:38:03 by mpellegr         ###   ########.fr        #
+#    Created: 2024/10/29 09:05:38 by mpellegr          #+#    #+#              #
+#    Updated: 2024/10/29 09:05:55 by mpellegr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,8 @@ NAME            = philo
 SRC_DIR         = src
 INC_DIR         = inc
 
-SRC             = $(SRC_DIR)/main.c $(SRC_DIR)/routine.c $(SRC_DIR)/create_table.c $(SRC_DIR)/utils.c
+SRC             = $(SRC_DIR)/main.c $(SRC_DIR)/routine.c $(SRC_DIR)/create_table.c $(SRC_DIR)/utils.c \
+					$(SRC_DIR)/init_data.c
 
 OBJ_DIR         = obj
 OBJ             = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
