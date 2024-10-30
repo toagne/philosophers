@@ -6,7 +6,7 @@
 /*   By: mpellegr <mpellegr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 17:32:44 by mpellegr          #+#    #+#             */
-/*   Updated: 2024/10/29 13:07:54 by mpellegr         ###   ########.fr       */
+/*   Updated: 2024/10/30 16:53:09 by mpellegr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,25 +21,24 @@
 #include <limits.h>
 #include <stdbool.h>
 
-typedef enum e_thread_operation
+typedef enum e_time_option
 {
-	INIT,
-	CREATE,
-	LOCK,
-	UNLOCK,
-	JOIN,
-	DESTROY
-}	t_thread_operation;
+	SEC,
+	MILLISEC,
+	MICROSEC
+}	t_time_option;
 
 typedef struct s_philo
 {
 	pthread_t		thread;
 	int				id;
-	pthread_mutex_t	*left_fork;
-	pthread_mutex_t	*right_fork;
-	struct s_table	*table;
 	int				n_of_meals;
-//	long long int	last_meal;
+	long			last_meal;
+	bool			is_full;
+	pthread_mutex_t	*first_fork;
+	pthread_mutex_t	*second_fork;
+	struct s_table	*table;
+	pthread_mutex_t	philo_lock;
 }	t_philo;
 
 typedef struct s_table
@@ -53,15 +52,28 @@ typedef struct s_table
 	pthread_mutex_t	*forks;
 	bool			all_threads_created;
 	bool			stop;
-	pthread_mutex_t	lock_action;
+	pthread_mutex_t	table_lock;
 	long			start;
+	pthread_t		monitor_thread;
+	int				n_of_running_threads;
+	pthread_mutex_t	printf_lock;
 }	t_table;
 
-void	*routine(void *ptr);
 int		create_table(char **argv, t_table *table);
+
+int 	init_data(t_table *table);
+
+void	*routine(void *ptr);
+void    *monitor_simulation(void *ptr);
+
 long	get_time();
+int		check_stop(t_table *table);
+void    ft_usleep(long input_time, t_philo *philo);
+void	safe_printf(t_philo *philo, char *str);
 
 int		return_error_int(char *str);
 char	*return_error_str(char *str);
+
+void    wait_all_threads_to_be_created(t_philo *philo);
 
 #endif

@@ -6,54 +6,70 @@
 /*   By: mpellegr <mpellegr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 09:05:43 by mpellegr          #+#    #+#             */
-/*   Updated: 2024/10/29 13:07:55 by mpellegr         ###   ########.fr       */
+/*   Updated: 2024/10/30 14:36:59 by mpellegr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static size_t	ft_strlen(const char *str)
-{
-	size_t	n;
-
-	n = 0;
-	while (str[n] != '\0')
-		n++;
-	return (n);
-}
-
-long	get_time()
+long	get_time(t_time_option time_option)
 {
 	struct timeval	tv;
 
 	if (gettimeofday(&tv, NULL) == -1)
-	{
-		write (2, "gettimeofday failed\n", 20);
-		return (0);
-	}
-	return (tv.tv_sec *1000 + tv.tv_usec / 1000);
+		return (return_error_int("gettimeofday failed\n"));
+	if (time_option == SEC)
+		return (tv.tv_sec + tv.tv_usec / 1000000);
+	else if (time_option == MILLISEC)
+		return (tv.tv_sec *1000 + tv.tv_usec / 1000);
+	else if (time_option == MICROSEC)
+		return (tv.tv_sec *1000000 + tv.tv_usec);
+	return (-1);
 }
 
-int	check_stop(t_philo *philo)
+int	check_stop(t_table *table)
 {
-	pthread_mutex_lock(&philo->table->lock_action);
-	if (philo->table->stop)
+	pthread_mutex_lock(&table->table_lock);
+	if (table->stop)
 	{
-		pthread_mutex_unlock(&philo->table->lock_action);
+		pthread_mutex_unlock(&table->table_lock);
 		return (1);
 	}
-	pthread_mutex_unlock(&philo->table->lock_action);
+	pthread_mutex_unlock(&table->table_lock);
 	return (0);
 }
 
-int	return_error_int(char *str)
+void    ft_usleep(long input_time, t_philo *philo)
 {
-	printf(str);
-	return (1);
+    long current_time;
+    long elapsed;
+    long rem;
+
+    current_time = get_time(MICROSEC);
+    //printf("initial time = %ld\n", current_time);
+    while (get_time(MICROSEC) - current_time < input_time)
+    {
+		if (check_stop(philo->table))
+			break ;
+        elapsed = get_time(MICROSEC) - current_time;
+        //printf("elapsed = %lu\n", elapsed);
+        rem = input_time - elapsed;
+        //printf("rem = %lu\n", rem);
+        if (rem > 1000)
+            usleep(rem / 2);
+        else
+            while (get_time(MICROSEC) - current_time < input_time)
+                ;
+      }
 }
 
-char	*return_error_str(char *str)
+void	safe_printf(t_philo *philo, char *str)
 {
-	printf(str);
-	return (NULL);
+	long	time;
+
+	time = get_time(MILLISEC) - philo->table->start;
+	//check if philo full or check stop
+	pthread_mutex_lock(&philo->table->printf_lock);
+	printf("%ld %d %s\n", time, philo->id, str);
+	pthread_mutex_unlock(&philo->table->printf_lock);
 }

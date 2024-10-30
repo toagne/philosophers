@@ -6,7 +6,7 @@
 #    By: mpellegr <mpellegr@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/29 09:05:38 by mpellegr          #+#    #+#              #
-#    Updated: 2024/10/29 09:05:55 by mpellegr         ###   ########.fr        #
+#    Updated: 2024/10/30 16:53:41 by mpellegr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,8 @@ SRC_DIR         = src
 INC_DIR         = inc
 
 SRC             = $(SRC_DIR)/main.c $(SRC_DIR)/routine.c $(SRC_DIR)/create_table.c $(SRC_DIR)/utils.c \
-					$(SRC_DIR)/init_data.c
+					$(SRC_DIR)/init_data.c $(SRC_DIR)/errors.c $(SRC_DIR)/monitor_simulation.c \
+					$(SRC_DIR)/sync.c
 
 OBJ_DIR         = obj
 OBJ             = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)

@@ -6,7 +6,7 @@
 /*   By: mpellegr <mpellegr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 17:32:08 by mpellegr          #+#    #+#             */
-/*   Updated: 2024/10/29 13:07:48 by mpellegr         ###   ########.fr       */
+/*   Updated: 2024/10/30 10:40:55 by mpellegr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,14 @@ static char	*validate_input(char *str)
 	if (*str == '+')
 		str++;
 	else if (*str == '-')
-		return_error_str("input is negative\n");
+		return_error_str("input is negative");
 	if (!ft_isdigit(*str))
-		return_error_str("input is not a digit\n");
+		return_error_str("input is not a digit");
 	num = str;
 	while (ft_isdigit(*str++))
 		len++;
 	if (len > 10)
-		return_error_str("input bigger than INT_MAX\n");
+		return_error_str("input bigger than INT_MAX");
 	return (num);
 }
 
