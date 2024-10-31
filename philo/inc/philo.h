@@ -6,7 +6,7 @@
 /*   By: mpellegr <mpellegr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 17:32:44 by mpellegr          #+#    #+#             */
-/*   Updated: 2024/10/30 16:53:09 by mpellegr         ###   ########.fr       */
+/*   Updated: 2024/10/31 10:18:44 by mpellegr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 #include <pthread.h>
 #include <sys/time.h>
 #include <limits.h>
-#include <stdbool.h>
 
 typedef enum e_time_option
 {
@@ -32,9 +31,9 @@ typedef struct s_philo
 {
 	pthread_t		thread;
 	int				id;
-	int				n_of_meals;
+	long			n_of_meals;
 	long			last_meal;
-	bool			is_full;
+	long			is_full;
 	pthread_mutex_t	*first_fork;
 	pthread_mutex_t	*second_fork;
 	struct s_table	*table;
@@ -48,15 +47,15 @@ typedef struct s_table
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				n_of_times_to_eat;
+	long			all_threads_created;
+	long			stop;
+	long			start;
+	long			n_of_running_threads;
 	t_philo			*philo;
 	pthread_mutex_t	*forks;
-	bool			all_threads_created;
-	bool			stop;
 	pthread_mutex_t	table_lock;
-	long			start;
-	pthread_t		monitor_thread;
-	int				n_of_running_threads;
 	pthread_mutex_t	printf_lock;
+	pthread_t		monitor_thread;
 }	t_table;
 
 int		create_table(char **argv, t_table *table);
@@ -75,5 +74,10 @@ int		return_error_int(char *str);
 char	*return_error_str(char *str);
 
 void    wait_all_threads_to_be_created(t_philo *philo);
+void    wait_all_threads_to_be_created_for_monitor(t_table *table);
+
+void	safe_set_long(pthread_mutex_t *mutex, long *var, long value);
+long	safe_get_long(pthread_mutex_t *mutex, long var);
+void	safe_increase_long(pthread_mutex_t *mutex, long *var);
 
 #endif

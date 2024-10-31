@@ -6,7 +6,7 @@
 /*   By: mpellegr <mpellegr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 17:26:27 by mpellegr          #+#    #+#             */
-/*   Updated: 2024/10/30 15:25:46 by mpellegr         ###   ########.fr       */
+/*   Updated: 2024/10/31 16:51:32 by mpellegr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	philosophers(t_table *table)
 	{
 		while (++i < table->n_of_philo)
 		{
-			if(pthread_create(&table->philo[i].thread, NULL, &routine, &table->philo[i]) != 0)
+			if (pthread_create(&table->philo[i].thread, NULL, &routine, &table->philo[i]) != 0)
 			{
 				//clean
 				printf("create threads failed\n");
@@ -33,22 +33,33 @@ int	philosophers(t_table *table)
 			}
 		}
 	}
-	if(pthread_create(&table->monitor_thread, NULL, &monitor_simulation, &table->philo[i]) != 0)
+	
+	if (pthread_create(&table->monitor_thread, NULL, &monitor_simulation, table) != 0)
 	{
 		//clean
 		printf("create threads failed\n");
 		return (1);
 	}
-
-	table->start = get_time(MILLISEC);
-
-	pthread_mutex_lock(&table->table_lock);
-	table->all_threads_created = true;
-	pthread_mutex_unlock(&table->table_lock);
+	
+	safe_set_long(&table->table_lock, &table->start, get_time(MILLISEC));
+	
+	safe_set_long(&table->table_lock, &table->all_threads_created, 1);
 	
 	i = -1;
 	while (++i < table->n_of_philo)
 		pthread_join(table->philo[i].thread, NULL);
+	
+	pthread_join(table->monitor_thread, NULL);
+	
+	i = -1;
+	while (++i < table->n_of_philo)
+	{
+		pthread_mutex_destroy(&table->forks[i]);
+		pthread_mutex_destroy(&table->philo[i].philo_lock);
+	}
+	pthread_mutex_destroy(&table->table_lock);
+	pthread_mutex_destroy(&table->printf_lock);
+	
 	return (0);
 }
 

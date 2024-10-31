@@ -6,7 +6,7 @@
 /*   By: mpellegr <mpellegr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 17:32:08 by mpellegr          #+#    #+#             */
-/*   Updated: 2024/10/30 10:40:55 by mpellegr         ###   ########.fr       */
+/*   Updated: 2024/10/31 16:31:55 by mpellegr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,14 @@ static char	*validate_input(char *str)
 	if (*str == '+')
 		str++;
 	else if (*str == '-')
-		return_error_str("input is negative");
+		return (return_error_str("input is negative"));
 	if (!ft_isdigit(*str))
-		return_error_str("input is not a digit");
+		return (return_error_str("input is not a digit"));
 	num = str;
 	while (ft_isdigit(*str++))
 		len++;
 	if (len > 10)
-		return_error_str("input bigger than INT_MAX");
+		return (return_error_str("input bigger than INT_MAX"));
 	return (num);
 }
 
@@ -52,16 +52,19 @@ static long	ft_atol(char *str, int *err)
 {
 	long num;
 
+	num = 0;
 	str = validate_input(str);
 	if (!str)
 		*err = 1;
-	num = 0;
-	while (ft_isdigit(*str))
-		num = num * 10 + (*str++ - '0');
-	if (num > INT_MAX)
+	else
 	{
-		write (2, "input bigger than INT_MAX\n", 26);
-		*err = 1;
+		while (ft_isdigit(*str))
+			num = num * 10 + (*str++ - '0');
+		if (num > INT_MAX)
+		{
+			write (2, "input bigger than INT_MAX\n", 26);
+			*err = 1;
+		}
 	}
 	return (num);
 }

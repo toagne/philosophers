@@ -6,20 +6,37 @@
 /*   By: mpellegr <mpellegr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 16:19:28 by mpellegr          #+#    #+#             */
-/*   Updated: 2024/10/30 16:55:07 by mpellegr         ###   ########.fr       */
+/*   Updated: 2024/10/31 17:06:08 by mpellegr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void    wait_all_threads_to_be_created(t_philo *philo)
+void	wait_all_threads_to_be_created(t_philo *philo)
 {
-    pthread_mutex_lock(&philo->table->table_lock);
-	while (!philo->table->all_threads_created)
+	while (1)
 	{
-        pthread_mutex_unlock(&philo->table->table_lock);
-        usleep(100);
-        pthread_mutex_lock(&philo->table->table_lock);
-    }
-	pthread_mutex_unlock(&philo->table->table_lock);
+		pthread_mutex_lock(&philo->table->table_lock);
+		if (philo->table->all_threads_created)
+		{
+			pthread_mutex_unlock(&philo->table->table_lock);
+			break ;
+		}
+		pthread_mutex_unlock(&philo->table->table_lock);
+		usleep(100);
+	}
+}
+void    wait_all_threads_to_be_created_for_monitor(t_table *table)
+{
+	while (1)
+	{
+		pthread_mutex_lock(&table->table_lock);
+		if (table->n_of_running_threads >= table->n_of_philo)
+		{
+			pthread_mutex_unlock(&table->table_lock);
+			break;
+		}
+		pthread_mutex_unlock(&table->table_lock);
+		usleep(100);
+	}
 }

@@ -3,6 +3,7 @@
 obj
 *.un~
 *.vscode
+LazyPhilosophersTester
 
 # Object files
 *.o
