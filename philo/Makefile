@@ -15,7 +15,7 @@ SRC_DIR         = src
 INC_DIR         = inc
 
 SRC             = $(SRC_DIR)/main.c $(SRC_DIR)/routine.c $(SRC_DIR)/create_table.c $(SRC_DIR)/utils.c \
-					$(SRC_DIR)/init_data.c $(SRC_DIR)/errors.c $(SRC_DIR)/monitor_simulation.c \
+					$(SRC_DIR)/init_data.c $(SRC_DIR)/errors.c $(SRC_DIR)/monitor_routine.c \
 					$(SRC_DIR)/sync.c $(SRC_DIR)/mutex_utils.c 
 
 OBJ_DIR         = obj

@@ -63,18 +63,19 @@ int		create_table(char **argv, t_table *table);
 int 	init_data(t_table *table);
 
 void	*routine(void *ptr);
-void    *monitor_simulation(void *ptr);
+void    *monitor_routine(void *ptr);
 
 long	get_time();
 int		check_stop(t_table *table);
-void    ft_usleep(long input_time, t_philo *philo);
+void    ft_usleep(long input_time, t_table *table);
 void	safe_printf(t_philo *philo, char *str);
 
 int		return_error_int(char *str);
 char	*return_error_str(char *str);
 
 void    wait_all_threads_to_be_created(t_philo *philo);
-void    wait_all_threads_to_be_created_for_monitor(t_table *table);
+void    wait_all_threads_to_run(t_table *table);
+void	philo_wait(t_philo *philo);
 
 void	safe_set_long(pthread_mutex_t *mutex, long *var, long value);
 long	safe_get_long(pthread_mutex_t *mutex, long var);

@@ -26,7 +26,7 @@ void	wait_all_threads_to_be_created(t_philo *philo)
 		usleep(100);
 	}
 }
-void    wait_all_threads_to_be_created_for_monitor(t_table *table)
+void    wait_all_threads_to_run(t_table *table)
 {
 	while (1)
 	{
@@ -39,4 +39,14 @@ void    wait_all_threads_to_be_created_for_monitor(t_table *table)
 		pthread_mutex_unlock(&table->table_lock);
 		usleep(100);
 	}
+}
+
+void	philo_wait(t_philo *philo)
+{
+	long	available_think_time;
+
+	available_think_time = philo->table->time_to_eat * 2 - philo->table->time_to_sleep;
+	if (available_think_time < 0)
+		available_think_time = 0;
+	ft_usleep(available_think_time * 0.5 * 1000, philo->table);
 }

@@ -26,7 +26,7 @@ long	get_time(t_time_option time_option)
 		return (tv.tv_sec *1000000 + tv.tv_usec);
 	return (-1);
 }
-void    ft_usleep(long input_time, t_philo *philo)
+void    ft_usleep(long input_time, t_table *table)
 {
     long current_time;
     long elapsed;
@@ -35,7 +35,7 @@ void    ft_usleep(long input_time, t_philo *philo)
     current_time = get_time(MICROSEC);
     while (get_time(MICROSEC) - current_time < input_time)
     {
-		if (check_stop(philo->table))
+		if (check_stop(table))
 			break ;
         elapsed = get_time(MICROSEC) - current_time;
         rem = input_time - elapsed;
@@ -51,8 +51,10 @@ void	safe_printf(t_philo *philo, char *str)
 	long	time;
 
 	time = get_time(MILLISEC) - philo->table->start;
-	//check if philo full or check stop
+	if (philo->is_full)
+		return ;
 	pthread_mutex_lock(&philo->table->printf_lock);
-	printf("%ld %d %s\n", time, philo->id, str);
+	if (!check_stop(philo->table))
+		printf("%ld %d %s\n", time, philo->id, str);	
 	pthread_mutex_unlock(&philo->table->printf_lock);
 }

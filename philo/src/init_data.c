@@ -12,7 +12,7 @@
 
 #include "philo.h"
 
-/*static void init_forks(t_table *table, int i)
+static void init_forks(t_table *table, int i)
 {
     if (table->philo[i].id % 2 == 0)
     {
@@ -25,7 +25,7 @@
         table->philo[i].second_fork = &table->forks[i];
     }
     
-}*/
+}
 
 static int philo_init(t_table *table)
 {
@@ -39,9 +39,9 @@ static int philo_init(t_table *table)
         table->philo[i].table = table;
         table->philo[i].is_full = 0;
         //table->philo[i].last_meal = get_time();
-        //init_forks(table, i);
-        table->philo[i].first_fork = &table->forks[i];
-        table->philo[i].second_fork = &table->forks[(i + 1) % table->n_of_philo];
+        init_forks(table, i);
+        //table->philo[i].first_fork = &table->forks[i];
+        //table->philo[i].second_fork = &table->forks[(i + 1) % table->n_of_philo];
         if (pthread_mutex_init(&table->philo[i].philo_lock, NULL) != 0)
             return (return_error_int("mutex init failed"));
     }

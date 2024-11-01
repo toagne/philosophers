@@ -31,6 +31,6 @@ long	safe_get_long(pthread_mutex_t *mutex, long var)
 void	safe_increase_long(pthread_mutex_t *mutex, long *var)
 {
 	pthread_mutex_lock(mutex);
-	*var = *var + 1;
+	(*var)++;
 	pthread_mutex_unlock(mutex);
 }

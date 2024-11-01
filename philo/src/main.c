@@ -34,14 +34,14 @@ int	philosophers(t_table *table)
 		}
 	}
 	
-	if (pthread_create(&table->monitor_thread, NULL, &monitor_simulation, table) != 0)
+	if (pthread_create(&table->monitor_thread, NULL, &monitor_routine, table) != 0)
 	{
 		//clean
 		printf("create threads failed\n");
 		return (1);
 	}
 	
-	safe_set_long(&table->table_lock, &table->start, get_time(MILLISEC));
+	table->start = get_time(MILLISEC);
 	
 	safe_set_long(&table->table_lock, &table->all_threads_created, 1);
 	
@@ -49,17 +49,10 @@ int	philosophers(t_table *table)
 	while (++i < table->n_of_philo)
 		pthread_join(table->philo[i].thread, NULL);
 	
+	safe_set_long(&table->table_lock, &table->stop, 1);
+
 	pthread_join(table->monitor_thread, NULL);
-	
-	i = -1;
-	while (++i < table->n_of_philo)
-	{
-		pthread_mutex_destroy(&table->forks[i]);
-		pthread_mutex_destroy(&table->philo[i].philo_lock);
-	}
-	pthread_mutex_destroy(&table->table_lock);
-	pthread_mutex_destroy(&table->printf_lock);
-	
+
 	return (0);
 }
 
