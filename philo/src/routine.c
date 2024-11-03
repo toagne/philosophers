@@ -58,10 +58,13 @@ static int	ft_eat(t_philo *philo)
 	safe_printf(philo, "has taken a fork");
 	pthread_mutex_lock(&philo->philo_lock);
 	philo->last_meal = get_time(MILLISEC) - philo->table->start;
-	philo->n_of_meals++;
+	//philo->n_of_meals++;
 	pthread_mutex_unlock(&philo->philo_lock);
 	safe_printf(philo, "is eating");
 	ft_usleep(philo->table->time_to_eat * 1000, philo->table);
+	pthread_mutex_lock(&philo->philo_lock);
+	philo->n_of_meals++;
+	pthread_mutex_unlock(&philo->philo_lock);
 	if (philo->table->n_of_times_to_eat > 0 && philo->n_of_meals == philo->table->n_of_times_to_eat)
 		safe_set_long(&philo->philo_lock, &philo->is_full, 1);
 	if (check_stop(philo->table))
@@ -125,6 +128,13 @@ void	*routine(void *ptr)
 		ft_sleep(philo);
 		ft_think(philo, 0);
 		//safe_printf(philo, "is thinking");//ft_think(philo);
+		/*pthread_mutex_lock(&philo->philo_lock);
+		if (philo->n_of_meals >= philo->table->n_of_times_to_eat)
+		{
+			pthread_mutex_unlock(&philo->philo_lock);
+			break ;
+		}
+		pthread_mutex_unlock(&philo->philo_lock);*/
 	}
 	return (NULL);
 }

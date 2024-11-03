@@ -32,7 +32,7 @@ int philo_dead(t_philo *philo)
     if (philo->is_full)
     {
         pthread_mutex_unlock(&philo->philo_lock);
-        return (1);    
+        return (0);    
     }
     time = get_time(MILLISEC) - philo->table->start;
     if (time - philo->last_meal  > philo->table->time_to_die)
@@ -49,7 +49,7 @@ void    *monitor_routine(void *ptr)
     int     i;
     //long    time;
     t_table	*table;
-    //int     full_count;
+    int     full_count;
 
 	table = (t_table *)ptr;
     wait_all_threads_to_run(table);
@@ -57,7 +57,7 @@ void    *monitor_routine(void *ptr)
 	{
         if (check_stop(table))
             break ;
-        //full_count = 0;
+        full_count = 0;
         i = -1;
         while (++i < table->n_of_philo)
         {
@@ -65,6 +65,7 @@ void    *monitor_routine(void *ptr)
             {
                 safe_printf(&table->philo[i], "died");
                 safe_set_long(&table->table_lock, &table->stop, 1);
+                break ;
             }
             /*pthread_mutex_lock(&table->table_lock);
             if (!table->stop)
@@ -78,21 +79,21 @@ void    *monitor_routine(void *ptr)
                     break ;
                 }
             }
-            pthread_mutex_unlock(&table->table_lock);
+            pthread_mutex_unlock(&table->table_lock);*/
             if (table->n_of_times_to_eat != -1)
             {
                 pthread_mutex_lock(&table->philo[i].philo_lock);
-                if (table->philo[i].is_full == 1)
+                if (table->philo[i].n_of_meals >= table->n_of_times_to_eat)
                     full_count++;
                 pthread_mutex_unlock(&table->philo[i].philo_lock);
-            }*/
+            }
         }
-        /*if (table->n_of_times_to_eat != -1 && full_count == table->n_of_philo)
+        if (table->n_of_times_to_eat != -1 && full_count == table->n_of_philo)
         {
             safe_set_long(&table->table_lock, &table->stop, 1);
             break;
         }
-        usleep(100);*/
+        usleep(100);
     }
 	return (NULL);
 }

@@ -51,8 +51,8 @@ void	safe_printf(t_philo *philo, char *str)
 	long	time;
 
 	time = get_time(MILLISEC) - philo->table->start;
-	if (philo->is_full)
-		return ;
+	//if (philo->is_full)
+	//	return ;
 	pthread_mutex_lock(&philo->table->printf_lock);
 	if (!check_stop(philo->table))
 		printf("%ld %d %s\n", time, philo->id, str);	

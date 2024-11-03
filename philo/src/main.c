@@ -49,7 +49,7 @@ int	philosophers(t_table *table)
 	while (++i < table->n_of_philo)
 		pthread_join(table->philo[i].thread, NULL);
 	
-	safe_set_long(&table->table_lock, &table->stop, 1);
+	//safe_set_long(&table->table_lock, &table->stop, 1);
 
 	pthread_join(table->monitor_thread, NULL);
 
