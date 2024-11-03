@@ -12,6 +12,14 @@
 
 #include "philo.h"
 
+int	one_philo(t_table *table)
+{
+	printf("%d %d %s\n", 0, table->philo[0].id, "has taken a fork");
+	ft_usleep(table->time_to_die, table);
+	printf("%d %d %s\n", table->time_to_die, table->philo[0].id, "died");
+	return (0);
+}
+
 int	philosophers(t_table *table)
 {
 	int			i;
@@ -20,7 +28,7 @@ int	philosophers(t_table *table)
 	if  (table->n_of_times_to_eat == 0)
 		return (0);
 	else if (table->n_of_philo == 1)
-		; //single philo
+		return (one_philo(table));
 	else
 	{
 		while (++i < table->n_of_philo)
