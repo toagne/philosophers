@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mpellegr <mpellegr@student.hive.fi>        +#+  +:+       +#+         #
+#    By: giuls <giuls@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/29 09:05:38 by mpellegr          #+#    #+#              #
-#    Updated: 2024/10/31 09:59:39 by mpellegr         ###   ########.fr        #
+#    Updated: 2024/11/03 15:56:16 by giuls            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,8 +15,8 @@ SRC_DIR         = src
 INC_DIR         = inc
 
 SRC             = $(SRC_DIR)/main.c $(SRC_DIR)/routine.c $(SRC_DIR)/create_table.c $(SRC_DIR)/utils.c \
-					$(SRC_DIR)/init_data.c $(SRC_DIR)/errors.c $(SRC_DIR)/monitor_routine.c \
-					$(SRC_DIR)/sync.c $(SRC_DIR)/mutex_utils.c 
+					$(SRC_DIR)/init_data.c $(SRC_DIR)/monitor_routine.c \
+					$(SRC_DIR)/sync.c $(SRC_DIR)/mutex_utils.c $(SRC_DIR)/exit_utils.c 
 
 OBJ_DIR         = obj
 OBJ             = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)

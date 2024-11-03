@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpellegr <mpellegr@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: giuls <giuls@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 17:32:44 by mpellegr          #+#    #+#             */
-/*   Updated: 2024/10/31 10:18:44 by mpellegr         ###   ########.fr       */
+/*   Updated: 2024/11/03 18:21:45 by giuls            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,13 @@ typedef enum e_time_option
 	MILLISEC,
 	MICROSEC
 }	t_time_option;
+
+typedef enum e_clean_phase
+{
+	ROUTINE_THREAD,
+	MONITOR_THREAD,
+	FINISHED
+}	t_clean_phase;
 
 typedef struct s_philo
 {
@@ -69,9 +76,13 @@ long	get_time();
 int		check_stop(t_table *table);
 void    ft_usleep(long input_time, t_table *table);
 void	safe_printf(t_philo *philo, char *str);
+void	destroy_mutex_array(pthread_mutex_t *mutex, t_table *table);
 
 int		return_error_int(char *str);
 char	*return_error_str(char *str);
+void	free_table(t_table *table);
+int		clean_all(t_table *table, t_clean_phase clean_phase, int i);
+void	destroy_mutexes(t_table *table);
 
 void    wait_all_threads_to_be_created(t_philo *philo);
 void    wait_all_threads_to_run(t_table *table);

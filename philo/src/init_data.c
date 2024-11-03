@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_data.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpellegr <mpellegr@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: giuls <giuls@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 10:40:08 by mpellegr          #+#    #+#             */
-/*   Updated: 2024/10/31 15:49:53 by mpellegr         ###   ########.fr       */
+/*   Updated: 2024/11/03 18:18:30 by giuls            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,14 @@ static int philo_init(t_table *table)
         //table->philo[i].first_fork = &table->forks[i];
         //table->philo[i].second_fork = &table->forks[(i + 1) % table->n_of_philo];
         if (pthread_mutex_init(&table->philo[i].philo_lock, NULL) != 0)
-            return (return_error_int("mutex init failed"));
+        {
+            while (--i >= 0)
+                pthread_mutex_destroy(&table->philo[i].philo_lock);
+            destroy_mutex_array(table->forks, table);
+            pthread_mutex_destroy(&table->table_lock);
+            pthread_mutex_destroy(&table->printf_lock);
+            return (return_error_int("pthread_mutex_init failed"));
+        }   
     }
     return (0);
 }
@@ -52,16 +59,25 @@ static int  init_mutexes(t_table *table)
 {
     int i;
 
+    if (pthread_mutex_init(&table->table_lock, NULL))
+        return (return_error_int("pthread_mutex_init failed"));
+    if (pthread_mutex_init(&table->printf_lock, NULL))
+    {
+        pthread_mutex_destroy(&table->table_lock);
+        return (return_error_int("pthread_mutex_init failed"));
+    }
     i = -1;
     while (++i < table->n_of_philo)
     {
-        if (pthread_mutex_init(&table->forks[i], NULL)) //destroy + clean
-            return (return_error_int("mutex init failed"));
+        if (pthread_mutex_init(&table->forks[i], NULL))
+        {
+            while (--i >= 0)
+                pthread_mutex_destroy(&table->forks[i]);
+            pthread_mutex_destroy(&table->table_lock);
+            pthread_mutex_destroy(&table->printf_lock);
+            return (return_error_int("pthread_mutex_init failed"));
+        }
     }
-    if (pthread_mutex_init(&table->table_lock, NULL)) //destroy + clean
-        return (return_error_int("mutex init failed"));
-    if (pthread_mutex_init(&table->printf_lock, NULL)) //destroy + clean
-        return (return_error_int("mutex init failed"));
     return (0);
 }
 
@@ -75,17 +91,19 @@ int init_data(t_table *table)
     table->n_of_running_threads = 0;
     table->philo = malloc(sizeof(t_philo) * table->n_of_philo);
     if (!table->philo)
+    {
+        free_table(table);
         return (return_error_int("malloc failed"));
+    }
     table->forks = malloc(sizeof(pthread_mutex_t) * table->n_of_philo);
     if (!table->forks)
     {
-        free(table->philo);
+        free_table(table);
         return (return_error_int("malloc failed"));
     }
     if (init_mutexes(table) != 0 || philo_init(table) != 0)
     {
-        free(table->philo);
-        free(table->forks);
+        free_table(table);
         return (1);
     }
     return (0);

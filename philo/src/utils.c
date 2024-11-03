@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpellegr <mpellegr@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: giuls <giuls@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 09:05:43 by mpellegr          #+#    #+#             */
-/*   Updated: 2024/10/31 10:21:49 by mpellegr         ###   ########.fr       */
+/*   Updated: 2024/11/03 16:28:51 by giuls            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,13 @@ void	safe_printf(t_philo *philo, char *str)
 	if (!check_stop(philo->table))
 		printf("%ld %d %s\n", time, philo->id, str);	
 	pthread_mutex_unlock(&philo->table->printf_lock);
+}
+
+void	destroy_mutex_array(pthread_mutex_t *mutex, t_table *table)
+{
+	int	i;
+
+	i = -1;
+	while (++i < table->n_of_philo)
+		pthread_mutex_destroy(&mutex[i]);
 }
