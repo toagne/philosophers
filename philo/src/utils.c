@@ -6,7 +6,7 @@
 /*   By: mpellegr <mpellegr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 09:05:43 by mpellegr          #+#    #+#             */
-/*   Updated: 2024/11/04 11:44:11 by mpellegr         ###   ########.fr       */
+/*   Updated: 2024/11/04 16:45:31 by mpellegr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,21 +30,33 @@ long	get_time(t_time_option time_option)
 void	ft_usleep(long input_time, t_table *table)
 {
 	long	current_time;
-	long	elapsed;
-	long	rem;
+	//long	elapsed;
+	//long	rem;
+    //struct timeval  start;
+    //struct timeval  end;
+	//long	real_time;
 
 	current_time = get_time(MICROSEC);
 	while (get_time(MICROSEC) - current_time < input_time)
 	{
+		
 		if (check_stop(table))
 			break ;
-		elapsed = get_time(MICROSEC) - current_time;
+		//gettimeofday(&start, NULL);
+		usleep(500);
+		//gettimeofday(&end, NULL);
+		//real_time = (end.tv_sec - start.tv_sec) * 1000000 + (end.tv_usec - start.tv_usec);
+		//if (real_time > 500)
+		//	usleep(500 - (real_time - 500));
+		/*elapsed = get_time(MICROSEC) - current_time;
 		rem = input_time - elapsed;
-		if (rem > 1000)
-			usleep(rem / 2);
+		if (rem > 10000)
+			usleep(5000);
+		else if (rem > 1000)
+			usleep(500);
 		else
 			while (get_time(MICROSEC) - current_time < input_time)
-				;
+				;*/
 	}
 }
 

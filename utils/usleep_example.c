@@ -23,10 +23,12 @@ void    precise_usleep(long sleep)
     while (get_time() - current_time < sleep)
     {
         elapsed = get_time() - current_time;
-        printf("elapsed = %lu\n", elapsed);
+        //printf("elapsed = %lu\n", elapsed);
         rem = sleep - elapsed;
-        printf("rem = %lu\n", rem);
-        if (rem > 1000)
+        //printf("rem = %lu\n", rem);
+        if (rem > 10000)
+            usleep(5000);
+        else if (rem > 1000)
             usleep(rem / 2);
         else
             while (get_time() - current_time < sleep)
@@ -45,6 +47,32 @@ void    new_precise_usleep(long sleep)
     } 
 }
 
+void    refined_precise_usleep(long sleep)
+{
+    long	current_time;
+    struct timeval  start;
+    struct timeval  end;
+	long	real_time;
+
+	current_time = get_time();
+	while (get_time() - current_time < sleep)
+	{
+		gettimeofday(&start, NULL);
+		usleep(500);
+		gettimeofday(&end, NULL);
+		real_time = (end.tv_sec - start.tv_sec) * 1000000 + (end.tv_usec - start.tv_usec);
+        //printf("real sleep time 1:      %ld microseconds\n", real_time);
+		if (real_time > 500)
+        {
+            //gettimeofday(&start, NULL);
+            usleep(500 - (real_time - 500));
+            //gettimeofday(&end, NULL);
+		    //real_time = (end.tv_sec - start.tv_sec) * 1000000 + (end.tv_usec - start.tv_usec);
+            //printf("real sleep time 2:      %ld microseconds\n", real_time);
+        }
+    }
+}
+
 int main()
 {
     struct timeval  start;
@@ -52,7 +80,7 @@ int main()
     long            time;
     long            real_time;
 
-    time = 200 * 1000;
+    time = 60 * 1000;
     gettimeofday(&start, NULL);
     usleep(time);
     gettimeofday(&end, NULL);
@@ -61,15 +89,22 @@ int main()
     printf("requested sleep time: %ld microseconds\n", time);
     printf("real sleep time:      %ld microseconds\n", real_time);
 
-    gettimeofday(&start, NULL);
+    /*gettimeofday(&start, NULL);
     precise_usleep(time);
     gettimeofday(&end, NULL);
     real_time = (end.tv_sec - start.tv_sec) * 1000000 + (end.tv_usec - start.tv_usec);
-    printf("requested sleep time: %ld microseconds\n", time);
-    printf("real sleep time:      %ld microseconds\n", real_time);
+    //printf("requested sleep time: %ld microseconds\n", time);
+    //printf("real sleep time:      %ld microseconds\n", real_time);
 
     gettimeofday(&start, NULL);
     new_precise_usleep(time);
+    gettimeofday(&end, NULL);
+    real_time = (end.tv_sec - start.tv_sec) * 1000000 + (end.tv_usec - start.tv_usec);
+    //printf("requested sleep time: %ld microseconds\n", time);
+    //printf("real sleep time:      %ld microseconds\n", real_time);*/
+
+    gettimeofday(&start, NULL);
+    refined_precise_usleep(time);
     gettimeofday(&end, NULL);
     real_time = (end.tv_sec - start.tv_sec) * 1000000 + (end.tv_usec - start.tv_usec);
     printf("requested sleep time: %ld microseconds\n", time);
