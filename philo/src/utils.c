@@ -6,7 +6,7 @@
 /*   By: mpellegr <mpellegr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 09:05:43 by mpellegr          #+#    #+#             */
-/*   Updated: 2024/11/04 11:00:53 by mpellegr         ###   ########.fr       */
+/*   Updated: 2024/11/04 11:44:11 by mpellegr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,8 @@ void	safe_printf(t_philo *philo, char *str)
 {
 	long	time;
 
-	time = get_time(MILLISEC) - philo->table->start;
 	pthread_mutex_lock(&philo->table->printf_lock);
+	time = get_time(MILLISEC) - philo->table->start;
 	if (!check_stop(philo->table))
 		printf("%ld %d %s\n", time, philo->id, str);
 	pthread_mutex_unlock(&philo->table->printf_lock);
