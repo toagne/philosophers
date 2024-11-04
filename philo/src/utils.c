@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: giuls <giuls@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mpellegr <mpellegr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 09:05:43 by mpellegr          #+#    #+#             */
-/*   Updated: 2024/11/03 16:28:51 by giuls            ###   ########.fr       */
+/*   Updated: 2024/11/04 09:45:22 by mpellegr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,41 +21,41 @@ long	get_time(t_time_option time_option)
 	if (time_option == SEC)
 		return (tv.tv_sec + tv.tv_usec / 1000000);
 	else if (time_option == MILLISEC)
-		return (tv.tv_sec *1000 + tv.tv_usec / 1000);
+		return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
 	else if (time_option == MICROSEC)
-		return (tv.tv_sec *1000000 + tv.tv_usec);
+		return (tv.tv_sec * 1000000 + tv.tv_usec);
 	return (-1);
 }
-void    ft_usleep(long input_time, t_table *table)
-{
-    long current_time;
-    long elapsed;
-    long rem;
 
-    current_time = get_time(MICROSEC);
-    while (get_time(MICROSEC) - current_time < input_time)
-    {
+void	ft_usleep(long input_time, t_table *table)
+{
+	long	current_time;
+	long	elapsed;
+	long	rem;
+
+	current_time = get_time(MICROSEC);
+	while (get_time(MICROSEC) - current_time < input_time)
+	{
 		if (check_stop(table))
 			break ;
-        elapsed = get_time(MICROSEC) - current_time;
-        rem = input_time - elapsed;
-        if (rem > 1000)
-            usleep(rem / 2);
-        else
-            while (get_time(MICROSEC) - current_time < input_time)
-                ;
-      }
+		elapsed = get_time(MICROSEC) - current_time;
+		rem = input_time - elapsed;
+		if (rem > 1000)
+			usleep(rem / 2);
+		else
+			while (get_time(MICROSEC) - current_time < input_time)
+				;
+	}
 }
+
 void	safe_printf(t_philo *philo, char *str)
 {
 	long	time;
 
 	time = get_time(MILLISEC) - philo->table->start;
-	//if (philo->is_full)
-	//	return ;
 	pthread_mutex_lock(&philo->table->printf_lock);
 	if (!check_stop(philo->table))
-		printf("%ld %d %s\n", time, philo->id, str);	
+		printf("%ld %d %s\n", time, philo->id, str);
 	pthread_mutex_unlock(&philo->table->printf_lock);
 }
 

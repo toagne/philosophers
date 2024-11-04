@@ -6,7 +6,7 @@
 /*   By: mpellegr <mpellegr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 17:32:08 by mpellegr          #+#    #+#             */
-/*   Updated: 2024/10/31 16:31:55 by mpellegr         ###   ########.fr       */
+/*   Updated: 2024/11/04 10:01:08 by mpellegr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static char	*validate_input(char *str)
 
 static long	ft_atol(char *str, int *err)
 {
-	long num;
+	long	num;
 
 	num = 0;
 	str = validate_input(str);

@@ -6,7 +6,7 @@
 /*   By: mpellegr <mpellegr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 16:49:25 by mpellegr          #+#    #+#             */
-/*   Updated: 2024/10/31 15:53:12 by mpellegr         ###   ########.fr       */
+/*   Updated: 2024/11/04 09:58:27 by mpellegr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,14 +58,14 @@ static int	ft_eat(t_philo *philo)
 	safe_printf(philo, "has taken a fork");
 	pthread_mutex_lock(&philo->philo_lock);
 	philo->last_meal = get_time(MILLISEC) - philo->table->start;
-	//philo->n_of_meals++;
 	pthread_mutex_unlock(&philo->philo_lock);
 	safe_printf(philo, "is eating");
 	ft_usleep(philo->table->time_to_eat * 1000, philo->table);
 	pthread_mutex_lock(&philo->philo_lock);
 	philo->n_of_meals++;
 	pthread_mutex_unlock(&philo->philo_lock);
-	if (philo->table->n_of_times_to_eat > 0 && philo->n_of_meals == philo->table->n_of_times_to_eat)
+	if (philo->table->n_of_times_to_eat > 0
+		&& philo->n_of_meals == philo->table->n_of_times_to_eat)
 		safe_set_long(&philo->philo_lock, &philo->is_full, 1);
 	if (check_stop(philo->table))
 	{
@@ -77,13 +77,14 @@ static int	ft_eat(t_philo *philo)
 	pthread_mutex_unlock(philo->second_fork);
 	return (0);
 }
+
 static void	ft_sleep(t_philo *philo)
 {
 	safe_printf(philo, "is sleeping");
 	ft_usleep(philo->table->time_to_sleep * 1000, philo->table);
 }
 
-void 	ft_think(t_philo *philo, int desync_threads)
+void	ft_think(t_philo *philo, int desync_threads)
 {
 	long	available_think_time;
 
@@ -103,16 +104,11 @@ void	*routine(void *ptr)
 	t_philo	*philo;
 
 	philo = (t_philo *)ptr;
-	
 	wait_all_threads_to_be_created(philo);
-	
-	//safe_set_long(&philo->philo_lock, &philo->last_meal, philo->table->start);
-	
-	safe_increase_long(&philo->table->table_lock, &philo->table->n_of_running_threads);
-	
+	safe_increase_long(&philo->table->table_lock,
+		&philo->table->n_of_running_threads);
 	if (philo->id % 2 != 0)
 		ft_think(philo, 1);
-
 	while (!check_stop(philo->table))
 	{
 		pthread_mutex_lock(&philo->philo_lock);
@@ -122,19 +118,10 @@ void	*routine(void *ptr)
 			break ;
 		}
 		pthread_mutex_unlock(&philo->philo_lock);
-		//ft_take_forks(philo);
 		if (ft_eat(philo) != 0)
 			break ;
 		ft_sleep(philo);
 		ft_think(philo, 0);
-		//safe_printf(philo, "is thinking");//ft_think(philo);
-		/*pthread_mutex_lock(&philo->philo_lock);
-		if (philo->n_of_meals >= philo->table->n_of_times_to_eat)
-		{
-			pthread_mutex_unlock(&philo->philo_lock);
-			break ;
-		}
-		pthread_mutex_unlock(&philo->philo_lock);*/
 	}
 	return (NULL);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: giuls <giuls@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mpellegr <mpellegr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 17:26:27 by mpellegr          #+#    #+#             */
-/*   Updated: 2024/11/03 18:22:03 by giuls            ###   ########.fr       */
+/*   Updated: 2024/11/04 09:50:07 by mpellegr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,22 +27,24 @@ int	philosophers(t_table *table)
 	int			i;
 
 	i = -1;
-	if  (table->n_of_times_to_eat == 0)
+	if (table->n_of_times_to_eat == 0)
 		return (0);
 	else if (table->n_of_philo == 1)
 		return (one_philo(table));
 	else
 		while (++i < table->n_of_philo)
-			if (pthread_create(&table->philo[i].thread, NULL, &routine, &table->philo[i]) != 0)
+			if (pthread_create(&table->philo[i].thread, NULL,
+					&routine, &table->philo[i]) != 0)
 				return (clean_all(table, ROUTINE_THREAD, i - 1));
-	if (pthread_create(&table->monitor_thread, NULL, &monitor_routine, table) != 0)
+	if (pthread_create(&table->monitor_thread, NULL,
+			&monitor_routine, table) != 0)
 		return (clean_all(table, MONITOR_THREAD, table->n_of_philo));
 	table->start = get_time(MILLISEC);
 	safe_set_long(&table->table_lock, &table->all_threads_created, 1);
 	return (clean_all(table, FINISHED, table->n_of_philo));
 }
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
 	t_table		*table;
 

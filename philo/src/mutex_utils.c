@@ -6,7 +6,7 @@
 /*   By: mpellegr <mpellegr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 09:59:19 by mpellegr          #+#    #+#             */
-/*   Updated: 2024/10/31 13:51:49 by mpellegr         ###   ########.fr       */
+/*   Updated: 2024/11/04 09:48:58 by mpellegr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ long	safe_get_long(pthread_mutex_t *mutex, long var)
 	pthread_mutex_unlock(mutex);
 	return (safe_var);
 }
+
 void	safe_increase_long(pthread_mutex_t *mutex, long *var)
 {
 	pthread_mutex_lock(mutex);

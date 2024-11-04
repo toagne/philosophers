@@ -3,22 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: giuls <giuls@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mpellegr <mpellegr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 17:32:44 by mpellegr          #+#    #+#             */
-/*   Updated: 2024/11/03 18:21:45 by giuls            ###   ########.fr       */
+/*   Updated: 2024/11/04 09:42:09 by mpellegr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <pthread.h>
-#include <sys/time.h>
-#include <limits.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <pthread.h>
+# include <sys/time.h>
+# include <limits.h>
 
 typedef enum e_time_option
 {
@@ -67,14 +67,14 @@ typedef struct s_table
 
 int		create_table(char **argv, t_table *table);
 
-int 	init_data(t_table *table);
+int		init_data(t_table *table);
 
 void	*routine(void *ptr);
-void    *monitor_routine(void *ptr);
+void	*monitor_routine(void *ptr);
 
-long	get_time();
+long	get_time(t_time_option time_option);
 int		check_stop(t_table *table);
-void    ft_usleep(long input_time, t_table *table);
+void	ft_usleep(long input_time, t_table *table);
 void	safe_printf(t_philo *philo, char *str);
 void	destroy_mutex_array(pthread_mutex_t *mutex, t_table *table);
 
@@ -84,8 +84,8 @@ void	free_table(t_table *table);
 int		clean_all(t_table *table, t_clean_phase clean_phase, int i);
 void	destroy_mutexes(t_table *table);
 
-void    wait_all_threads_to_be_created(t_philo *philo);
-void    wait_all_threads_to_run(t_table *table);
+void	wait_all_threads_to_be_created(t_philo *philo);
+void	wait_all_threads_to_run(t_table *table);
 void	philo_wait(t_philo *philo);
 
 void	safe_set_long(pthread_mutex_t *mutex, long *var, long value);

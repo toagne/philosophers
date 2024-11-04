@@ -6,7 +6,7 @@
 /*   By: mpellegr <mpellegr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 16:19:28 by mpellegr          #+#    #+#             */
-/*   Updated: 2024/10/31 17:06:08 by mpellegr         ###   ########.fr       */
+/*   Updated: 2024/11/04 09:46:25 by mpellegr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ void	wait_all_threads_to_be_created(t_philo *philo)
 		usleep(100);
 	}
 }
-void    wait_all_threads_to_run(t_table *table)
+
+void	wait_all_threads_to_run(t_table *table)
 {
 	while (1)
 	{
@@ -34,7 +35,7 @@ void    wait_all_threads_to_run(t_table *table)
 		if (table->n_of_running_threads >= table->n_of_philo)
 		{
 			pthread_mutex_unlock(&table->table_lock);
-			break;
+			break ;
 		}
 		pthread_mutex_unlock(&table->table_lock);
 		usleep(100);
