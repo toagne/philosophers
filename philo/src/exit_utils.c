@@ -5,12 +5,10 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mpellegr <mpellegr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/03 15:53:06 by giuls             #+#    #+#             */
-/*   Updated: 2024/11/04 10:01:55 by mpellegr         ###   ########.fr       */
+/*   Created: 2024/11/04 10:22:13 by mpellegr          #+#    #+#             */
+/*   Updated: 2024/11/04 10:22:16 by mpellegr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-// update header
 
 #include "philo.h"
 

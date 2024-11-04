@@ -6,21 +6,11 @@
 /*   By: mpellegr <mpellegr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 17:26:27 by mpellegr          #+#    #+#             */
-/*   Updated: 2024/11/04 09:50:07 by mpellegr         ###   ########.fr       */
+/*   Updated: 2024/11/04 11:00:16 by mpellegr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-int	one_philo(t_table *table)
-{
-	printf("%d %d %s\n", 0, table->philo[0].id, "has taken a fork");
-	ft_usleep(table->time_to_die, table);
-	printf("%d %d %s\n", table->time_to_die, table->philo[0].id, "died");
-	destroy_mutexes(table);
-	free_table(table);
-	return (0);
-}
 
 int	philosophers(t_table *table)
 {
@@ -29,8 +19,6 @@ int	philosophers(t_table *table)
 	i = -1;
 	if (table->n_of_times_to_eat == 0)
 		return (0);
-	else if (table->n_of_philo == 1)
-		return (one_philo(table));
 	else
 		while (++i < table->n_of_philo)
 			if (pthread_create(&table->philo[i].thread, NULL,

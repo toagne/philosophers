@@ -6,7 +6,7 @@
 /*   By: mpellegr <mpellegr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 16:19:28 by mpellegr          #+#    #+#             */
-/*   Updated: 2024/11/04 09:46:25 by mpellegr         ###   ########.fr       */
+/*   Updated: 2024/11/04 10:17:41 by mpellegr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,4 @@ void	wait_all_threads_to_run(t_table *table)
 		pthread_mutex_unlock(&table->table_lock);
 		usleep(100);
 	}
-}
-
-void	philo_wait(t_philo *philo)
-{
-	long	available_think_time;
-
-	available_think_time = philo->table->time_to_eat * 2 - philo->table->time_to_sleep;
-	if (available_think_time < 0)
-		available_think_time = 0;
-	ft_usleep(available_think_time * 0.5 * 1000, philo->table);
 }

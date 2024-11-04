@@ -6,7 +6,7 @@
 /*   By: mpellegr <mpellegr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 11:49:05 by mpellegr          #+#    #+#             */
-/*   Updated: 2024/11/04 10:00:27 by mpellegr         ###   ########.fr       */
+/*   Updated: 2024/11/04 10:32:30 by mpellegr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,32 @@ int	philo_dead(t_philo *philo)
 	return (0);
 }
 
+int	check_philo(t_table *table, int	*full_count)
+{
+	int	i;
+
+	i = -1;
+	while (++i < table->n_of_philo)
+	{
+		if (philo_dead(&table->philo[i]))
+		{
+			safe_printf(&table->philo[i], "died");
+			safe_set_long(&table->table_lock, &table->stop, 1);
+			return (1);
+		}
+		if (table->n_of_times_to_eat != -1)
+		{
+			pthread_mutex_lock(&table->philo[i].philo_lock);
+			if (table->philo[i].n_of_meals >= table->n_of_times_to_eat)
+				(*full_count)++;
+			pthread_mutex_unlock(&table->philo[i].philo_lock);
+		}
+	}
+	return (0);
+}
+
 void	*monitor_routine(void *ptr)
 {
-	int		i;
-	//long    time;
 	t_table	*table;
 	int		full_count;
 
@@ -58,36 +80,8 @@ void	*monitor_routine(void *ptr)
 		if (check_stop(table))
 			break ;
 		full_count = 0;
-		i = -1;
-		while (++i < table->n_of_philo)
-		{
-			if (philo_dead(table->philo + i))
-			{
-				safe_printf(&table->philo[i], "died");
-				safe_set_long(&table->table_lock, &table->stop, 1);
-				break ;
-			}
-			/*pthread_mutex_lock(&table->table_lock);
-			if (!table->stop)
-			{
-				time = get_time(MILLISEC) - table->start;                
-				if (time - table->philo[i].last_meal > table->time_to_die)
-				{
-					safe_printf(&table->philo[i], "died");
-					table->stop = 1;
-					pthread_mutex_unlock(&table->table_lock);
-					break ;
-				}
-			}
-			pthread_mutex_unlock(&table->table_lock);*/
-			if (table->n_of_times_to_eat != -1)
-			{
-				pthread_mutex_lock(&table->philo[i].philo_lock);
-				if (table->philo[i].n_of_meals >= table->n_of_times_to_eat)
-					full_count++;
-				pthread_mutex_unlock(&table->philo[i].philo_lock);
-			}
-		}
+		if (check_philo(table, &full_count) != 0)
+			break ;
 		if (table->n_of_times_to_eat != -1 && full_count == table->n_of_philo)
 		{
 			safe_set_long(&table->table_lock, &table->stop, 1);

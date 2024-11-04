@@ -6,49 +6,20 @@
 /*   By: mpellegr <mpellegr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 16:49:25 by mpellegr          #+#    #+#             */
-/*   Updated: 2024/11/04 09:58:27 by mpellegr         ###   ########.fr       */
+/*   Updated: 2024/11/04 11:00:01 by mpellegr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-/*static void	ft_take_forks(t_philo *philo)
+char	*one_philo(t_philo *philo)
 {
-	int	first_locked;
-	int	second_locked;
-
-	first_locked = 0;
-	second_locked = 0;
 	pthread_mutex_lock(philo->first_fork);
-	first_locked = 1;
-	safe_printf(philo, "has taken a fork");
-	if (!check_stop(philo->table))
-	{
-		pthread_mutex_lock(philo->second_fork);
-		second_locked = 1;
-		safe_printf(philo, "has taken a fork");
-	}
-	if (!second_locked && first_locked)
-		pthread_mutex_unlock(philo->first_fork);
-}*/
-
-/*static void	ft_take_forks(t_philo *philo)
-{
-	if (philo->id % 2 == 0)
-	{
-		pthread_mutex_lock(philo->first_fork);
-		safe_printf(philo, "has taken a fork");
-		pthread_mutex_lock(philo->second_fork);
-		safe_printf(philo, "has taken a fork");
-	}
-	else
-	{
-		pthread_mutex_lock(philo->second_fork);
-		safe_printf(philo, "has taken a fork");
-		pthread_mutex_lock(philo->first_fork);
-		safe_printf(philo, "has taken a fork");
-	}
-}*/
+	printf("%d %d %s\n", 0, philo[0].id, "has taken a fork");
+	ft_usleep(philo->table->time_to_die, philo->table);
+	pthread_mutex_unlock(philo->first_fork);
+	return (NULL);
+}
 
 static int	ft_eat(t_philo *philo)
 {
@@ -86,17 +57,21 @@ static void	ft_sleep(t_philo *philo)
 
 void	ft_think(t_philo *philo, int desync_threads)
 {
-	long	available_think_time;
+	long	avail_think_time;
+	int		t_to_eat;
+	int		t_to_sleep;
 
+	t_to_eat = philo->table->time_to_eat;
+	t_to_sleep = philo->table->time_to_sleep;
 	if (!desync_threads)
 		safe_printf(philo, "is thinking");
-	available_think_time = philo->table->time_to_eat * 2 - philo->table->time_to_sleep;
-	if (available_think_time < 0)
-		available_think_time = 0;
+	avail_think_time = t_to_eat * 2 - t_to_sleep;
+	if (avail_think_time < 0)
+		avail_think_time = 0;
 	if (desync_threads)
-		ft_usleep(available_think_time * 0.5 * 1000, philo->table);
+		ft_usleep(avail_think_time * 0.5 * 1000, philo->table);
 	else if (!desync_threads && philo->table->n_of_philo % 2 != 0)
-		ft_usleep(available_think_time * 0.5 * 1000, philo->table);
+		ft_usleep(avail_think_time * 0.5 * 1000, philo->table);
 }
 
 void	*routine(void *ptr)
@@ -107,6 +82,8 @@ void	*routine(void *ptr)
 	wait_all_threads_to_be_created(philo);
 	safe_increase_long(&philo->table->table_lock,
 		&philo->table->n_of_running_threads);
+	if (philo->table->n_of_philo == 1)
+		return (one_philo(philo));
 	if (philo->id % 2 != 0)
 		ft_think(philo, 1);
 	while (!check_stop(philo->table))

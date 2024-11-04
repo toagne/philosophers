@@ -6,7 +6,7 @@
 /*   By: mpellegr <mpellegr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 17:32:08 by mpellegr          #+#    #+#             */
-/*   Updated: 2024/11/04 10:01:08 by mpellegr         ###   ########.fr       */
+/*   Updated: 2024/11/04 10:12:06 by mpellegr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,9 @@ int	create_table(char **argv, t_table *table)
 	else
 		table->n_of_times_to_eat = -1;
 	if (err == 1)
+	{
+		free(table);
 		return (1);
+	}
 	return (0);
 }

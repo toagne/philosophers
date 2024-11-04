@@ -6,7 +6,7 @@
 /*   By: mpellegr <mpellegr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 10:40:08 by mpellegr          #+#    #+#             */
-/*   Updated: 2024/11/04 09:54:26 by mpellegr         ###   ########.fr       */
+/*   Updated: 2024/11/04 10:17:02 by mpellegr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ static void	init_forks(t_table *table, int i)
 	if (table->philo[i].id % 2 == 0)
 	{
 		table->philo[i].first_fork = &table->forks[i];
-		table->philo[i].second_fork = &table->forks[(i + 1) % table->n_of_philo];
+		table->philo[i].second_fork = &table->forks[(i + 1)
+			% table->n_of_philo];
 	}
 	else
 	{
@@ -37,6 +38,7 @@ static int	philo_init(t_table *table)
 		table->philo[i].n_of_meals = 0;
 		table->philo[i].table = table;
 		table->philo[i].is_full = 0;
+		table->philo[i].last_meal = 0;
 		init_forks(table, i);
 		if (pthread_mutex_init(&table->philo[i].philo_lock, NULL) != 0)
 		{
