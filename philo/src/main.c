@@ -6,7 +6,7 @@
 /*   By: mpellegr <mpellegr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 17:26:27 by mpellegr          #+#    #+#             */
-/*   Updated: 2024/11/04 15:05:56 by mpellegr         ###   ########.fr       */
+/*   Updated: 2024/11/05 11:22:47 by mpellegr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,10 @@ int	philosophers(t_table *table)
 
 	i = -1;
 	if (table->n_of_times_to_eat == 0 || table->n_of_philo == 0)
+	{
+		free_table(table);
 		return (0);
+	}
 	else
 		while (++i < table->n_of_philo)
 			if (pthread_create(&table->philo[i].thread, NULL,

@@ -6,7 +6,7 @@
 /*   By: mpellegr <mpellegr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 16:49:25 by mpellegr          #+#    #+#             */
-/*   Updated: 2024/11/04 11:00:01 by mpellegr         ###   ########.fr       */
+/*   Updated: 2024/11/05 11:03:31 by mpellegr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,12 @@ void	ft_think(t_philo *philo, int desync_threads)
 	int		t_to_eat;
 	int		t_to_sleep;
 
-	t_to_eat = philo->table->time_to_eat;
-	t_to_sleep = philo->table->time_to_sleep;
 	if (!desync_threads)
 		safe_printf(philo, "is thinking");
+	if (!desync_threads && philo->table->n_of_philo % 2 == 0)
+		return ;
+	t_to_eat = philo->table->time_to_eat;
+	t_to_sleep = philo->table->time_to_sleep;
 	avail_think_time = t_to_eat * 2 - t_to_sleep;
 	if (avail_think_time < 0)
 		avail_think_time = 0;
