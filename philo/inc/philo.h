@@ -6,7 +6,7 @@
 /*   By: mpellegr <mpellegr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 17:32:44 by mpellegr          #+#    #+#             */
-/*   Updated: 2024/11/04 09:42:09 by mpellegr         ###   ########.fr       */
+/*   Updated: 2024/11/05 12:58:15 by mpellegr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 
 typedef enum e_time_option
 {
-	SEC,
 	MILLISEC,
 	MICROSEC
 }	t_time_option;
@@ -86,7 +85,6 @@ void	destroy_mutexes(t_table *table);
 
 void	wait_all_threads_to_be_created(t_philo *philo);
 void	wait_all_threads_to_run(t_table *table);
-void	philo_wait(t_philo *philo);
 
 void	safe_set_long(pthread_mutex_t *mutex, long *var, long value);
 long	safe_get_long(pthread_mutex_t *mutex, long var);
