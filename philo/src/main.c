@@ -6,7 +6,7 @@
 /*   By: mpellegr <mpellegr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 17:26:27 by mpellegr          #+#    #+#             */
-/*   Updated: 2024/11/05 11:22:47 by mpellegr         ###   ########.fr       */
+/*   Updated: 2024/11/05 16:47:31 by mpellegr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,11 @@ int	main(int argc, char **argv)
 		return (EXIT_FAILURE);
 	}
 	table = malloc(sizeof(t_table));
+	if (!table)
+	{
+		printf("malloc failed\n");
+		return (EXIT_FAILURE);
+	}
 	if (create_table(argv, table) != 0)
 		return (EXIT_FAILURE);
 	if (init_data(table) != 0)
