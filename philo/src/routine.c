@@ -6,7 +6,7 @@
 /*   By: mpellegr <mpellegr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 16:49:25 by mpellegr          #+#    #+#             */
-/*   Updated: 2024/11/05 11:03:31 by mpellegr         ###   ########.fr       */
+/*   Updated: 2024/11/07 14:41:09 by mpellegr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int	ft_eat(t_philo *philo)
 	philo->last_meal = get_time(MILLISEC) - philo->table->start;
 	pthread_mutex_unlock(&philo->philo_lock);
 	safe_printf(philo, "is eating");
-	ft_usleep(philo->table->time_to_eat * 1000, philo->table);
+	ft_usleep(philo->table->time_to_eat, philo->table);
 	pthread_mutex_lock(&philo->philo_lock);
 	philo->n_of_meals++;
 	pthread_mutex_unlock(&philo->philo_lock);
@@ -52,7 +52,7 @@ static int	ft_eat(t_philo *philo)
 static void	ft_sleep(t_philo *philo)
 {
 	safe_printf(philo, "is sleeping");
-	ft_usleep(philo->table->time_to_sleep * 1000, philo->table);
+	ft_usleep(philo->table->time_to_sleep, philo->table);
 }
 
 void	ft_think(t_philo *philo, int desync_threads)
@@ -71,9 +71,9 @@ void	ft_think(t_philo *philo, int desync_threads)
 	if (avail_think_time < 0)
 		avail_think_time = 0;
 	if (desync_threads)
-		ft_usleep(avail_think_time * 0.5 * 1000, philo->table);
+		ft_usleep(avail_think_time * 0.5, philo->table);
 	else if (!desync_threads && philo->table->n_of_philo % 2 != 0)
-		ft_usleep(avail_think_time * 0.5 * 1000, philo->table);
+		ft_usleep(avail_think_time * 0.5, philo->table);
 }
 
 void	*routine(void *ptr)

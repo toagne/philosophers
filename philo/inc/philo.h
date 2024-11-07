@@ -6,7 +6,7 @@
 /*   By: mpellegr <mpellegr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 17:32:44 by mpellegr          #+#    #+#             */
-/*   Updated: 2024/11/07 10:15:39 by mpellegr         ###   ########.fr       */
+/*   Updated: 2024/11/07 14:31:32 by mpellegr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,9 @@ typedef struct s_philo
 typedef struct s_table
 {
 	int				n_of_philo;
-	long long		time_to_die;
-	long long		time_to_eat;
-	long long		time_to_sleep;
+	int				time_to_die;
+	int				time_to_eat;
+	int				time_to_sleep;
 	int				n_of_times_to_eat;
 	long			all_threads_created;
 	long			stop;
@@ -71,9 +71,9 @@ int			init_data(t_table *table);
 void		*routine(void *ptr);
 void		*monitor_routine(void *ptr);
 
-long long	get_time(t_time_option time_option);
+long		get_time(t_time_option time_option);
 int			check_stop(t_table *table);
-void		ft_usleep(long long input_time, t_table *table);
+void		ft_usleep(int input_time_ms, t_table *table);
 void		safe_printf(t_philo *philo, char *str);
 void		destroy_mutex_array(pthread_mutex_t *mutex, t_table *table);
 
