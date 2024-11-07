@@ -6,13 +6,13 @@
 /*   By: mpellegr <mpellegr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 09:05:43 by mpellegr          #+#    #+#             */
-/*   Updated: 2024/11/05 10:12:10 by mpellegr         ###   ########.fr       */
+/*   Updated: 2024/11/07 10:14:49 by mpellegr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-long	get_time(t_time_option time_option)
+long long	get_time(t_time_option time_option)
 {
 	struct timeval	tv;
 
@@ -25,9 +25,9 @@ long	get_time(t_time_option time_option)
 	return (-1);
 }
 
-void	ft_usleep(long input_time, t_table *table)
+void	ft_usleep(long long input_time, t_table *table)
 {
-	long	current_time;
+	long long	current_time;
 
 	current_time = get_time(MICROSEC);
 	while (get_time(MICROSEC) - current_time < input_time)
