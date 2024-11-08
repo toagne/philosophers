@@ -6,7 +6,7 @@
 /*   By: mpellegr <mpellegr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 10:40:08 by mpellegr          #+#    #+#             */
-/*   Updated: 2024/11/04 10:17:02 by mpellegr         ###   ########.fr       */
+/*   Updated: 2024/11/08 14:51:48 by mpellegr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,14 +87,11 @@ int	init_data(t_table *table)
 	table->all_threads_created = 0;
 	table->stop = 0;
 	table->n_of_running_threads = 0;
+	table->philo = NULL;
+	table->forks = NULL;
 	table->philo = malloc(sizeof(t_philo) * table->n_of_philo);
-	if (!table->philo)
-	{
-		free_table(table);
-		return (return_error_int("malloc failed"));
-	}
 	table->forks = malloc(sizeof(pthread_mutex_t) * table->n_of_philo);
-	if (!table->forks)
+	if (!table->philo || !table->forks)
 	{
 		free_table(table);
 		return (return_error_int("malloc failed"));
