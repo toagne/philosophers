@@ -6,7 +6,7 @@
 /*   By: mpellegr <mpellegr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 10:22:13 by mpellegr          #+#    #+#             */
-/*   Updated: 2024/11/08 16:37:08 by mpellegr         ###   ########.fr       */
+/*   Updated: 2024/11/08 16:45:59 by mpellegr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ int	clean_all(t_table *table, t_clean_phase clean_phase, int max)
 	int	i;
 
 	i = -1;
+	if (max == 0)
+		max = 1;
 	while (++i < max)
 		pthread_join(table->philo[i].thread, NULL);
 	if (clean_phase == MONITOR_THREAD || clean_phase == FINISHED)
